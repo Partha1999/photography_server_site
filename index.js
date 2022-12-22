@@ -15,7 +15,16 @@ console.log(uri);
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 async function run() {
+    try {
+        const serviceCollection = client.db("photoServer").collection("services");
+        const reviewCollection = client.db("photoServer").collection("review");
     
+        app.get("/services", async (req, res) => {
+          const query = {};
+          const cursor = serviceCollection.find(query);
+          const servies = await cursor.toArray();
+          res.send(servies);
+        });
 
     app.post("/services", async (req, res) => {
       const services = req.body;
